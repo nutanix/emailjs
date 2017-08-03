@@ -1,0 +1,23 @@
+{
+  "name": "ntnx-emailjs-module",
+  "version": "0.1.0",
+  "description": "Event driven JS email module",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nutanix/ntnx-emailjs-module.git"
+  },
+  "keywords": [
+    "email",
+    "event"
+  ],
+  "author": "Mario Vinay <mariovinay.apps@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nutanix/ntnx-emailjs-module/issues"
+  },
+  "homepage": "https://github.com/nutanix/ntnx-emailjs-module#readme"
+}
