@@ -4,7 +4,7 @@
   "description": "Event driven JS email module",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,15 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nutanix/ntnx-emailjs-module/issues"
+  },
+  "dependencies": {
+    "nodemailer": "2.7.0",
+    "email-templates": "^2.5.4",
+    "handlebars": "^3.0.0",
+    "q": "^1.4.1",
+    "request": "^2.75.0",
+    "sails-postgresql": "^0.11.4",
+    "waterline": "^0.12.2"
   },
   "homepage": "https://github.com/nutanix/ntnx-emailjs-module#readme"
 }
