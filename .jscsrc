@@ -1,0 +1,38 @@
+{
+  /////////////////////////////////////////////////////////////////////////////
+  // Options
+  "excludeFiles": [
+    "node_modules/**",
+    "assets/js/lib/**"
+  ],
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Style Rules
+  "validateLineBreaks": "LF",
+  "validateIndentation": 2,
+  "requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch"],
+  "requireSpacesInFunctionExpression": {
+    "beforeOpeningCurlyBrace": true,
+    "beforeOpeningRoundBrace": true
+  },
+  "requireMultipleVarDecl": true,
+  "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
+  "requireSpaceAfterBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
+  "disallowSpaceAfterPrefixUnaryOperators": ["!"],
+  "requireLineFeedAtFileEnd": true,
+  "disallowKeywords": ["with"],
+  "disallowMultipleLineBreaks": true,
+  "disallowKeywordsOnNewLine": ["else"],
+  "disallowSpacesInsideObjectBrackets": true,
+  "disallowSpacesInsideArrayBrackets": true,
+  "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-"],
+  "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
+  "requireSpaceBeforeBinaryOperators": ["?", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+  "requireSpaceAfterBinaryOperators": ["?", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
+  "requireSpacesInConditionalExpression": {
+      "afterTest": true,
+      "beforeConsequent": true,
+      "afterConsequent": true,
+      "beforeAlternate": true
+  }
+}
