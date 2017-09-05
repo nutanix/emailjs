@@ -1,30 +1,35 @@
-'use strict';
-/* jshint node:true */
+/* jshint node:true, strict:false */
 
 /**
  * Replace your email address at <your_email@domain.com>
  */
 
-var path = require('path');
-var emailJS = require('../index');
-var templates = path.resolve('views/templates');
-var config = require('./config');
-var rules = require('./rules');
+var email = require('../index'),
+  path = require('path'),
+  templates = path.resolve('views/templates'),
+  config = require('./config'),
+  rules = require('./rules');
 
-var client = emailJS.getClient();
-
-client.on('error', function (err) {
-  console.log('[Client] Error received: ', err);
+email.on('error', function (err) {
+  console.log('[Client] Error: ',err);
 });
 
-client.init(templates, config, rules, function (err) {
+email.connect(templates, config, rules, function (err) {
+  console.log('called');
   console.log('[Client] Error initializing module: ', err);
 });
 
-client.on('ready', function () {
-
+email.on('ready', function () {
   /* This email will be sent */
-  //client.emit('SUCCEED_RULE', {}, {});
+  email.fire('SUCCEED_RULE', {}, {
+    attachments: {
+      path: 'http://www.pdf995.com/samples/pdf.pdf'
+    }
+  }, function (err, data) {
+  	// OPTIONAL callback
+    console.log('err >>> ', err);
+    console.log('data >>> ', data);
+  });
   
   /* This email will NOT be sent */
   //client.emit('FAILED_RULE', {}, {});
@@ -32,12 +37,12 @@ client.on('ready', function () {
   /* Rules not configured are not processed */
   //client.emit('NON_EXISTENT_RULE', {}, {});
   
-  /* Send an email without any config or rule checking */
-  // sendEmailDirectly();
+  /* Send an email without any preconfigured config or rules*/
+  //sendEmailWithoutConfiguration();
 });
 
-function sendEmailDirectly () {
-  client.send(
+function sendEmailWithoutConfiguration () {
+  email.send(
   {
     name: 'John Doe'
   }, 
@@ -53,7 +58,7 @@ function sendEmailDirectly () {
     ] 
   }, function (err) {
     // Optional callback
-    // IF passed, called on error while sending mail
-    console.log('Error occured: ',err);
+    // IF passed, called on error/success while sending mail
+    console.log('err >>> ',err);
   });
 }

@@ -12,7 +12,7 @@ module.exports = {
      * If present overrides default settings
      *
      * schema: {
-     *   schema: 'public',
+     *   schema: 'mail_schema',
      *   outboxtable: 'mail_outbox',
      *   archivetable: 'mail_archive',
      *   rulestable: 'mail_rules'
@@ -61,7 +61,7 @@ module.exports = {
     providers: {
       postgres: {
         adapter: 'sails-postgresql',
-        url: 'postgres://localhost/test',
+        url: 'postgres://lxrmrrfncgyeze:NhvTH32uglmn8CS04r0QAyA3Ya@ec2-54-235-120-118.compute-1.amazonaws.com:5432/d6f3q4os0vv4ja',
         ssl: true,
         multipleStatements: true,
         wlNext: {

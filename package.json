@@ -1,14 +1,14 @@
 {
-  "name": "ntnx-emailjs-module",
+  "name": "emailjs",
   "version": "0.1.0",
   "description": "Event driven JS email module",
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "test": "node ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha test/bootstrap.test.js test/**/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nutanix/ntnx-emailjs-module.git"
+    "url": "git+https://github.com/nutanix/emailjs.git"
   },
   "keywords": [
     "email",
@@ -17,16 +17,27 @@
   "author": "Mario Vinay <mariovinay.apps@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nutanix/ntnx-emailjs-module/issues"
+    "url": "https://github.com/nutanix/emailjs/issues"
   },
   "dependencies": {
     "nodemailer": "2.7.0",
-    "email-templates": "^2.5.4",
-    "handlebars": "^3.0.0",
-    "q": "^1.4.1",
-    "request": "^2.75.0",
-    "sails-postgresql": "^0.11.4",
-    "waterline": "^0.12.2"
+    "email-templates": "2.5.4",
+    "handlebars": "3.0.0",
+    "q": "1.4.1",
+    "lodash": "2.4.1",
+    "sails-postgresql": "0.11.4",
+    "waterline": "0.12.2"
   },
-  "homepage": "https://github.com/nutanix/ntnx-emailjs-module#readme"
+  "devDependencies": {
+    "chai": "3.5.0",
+    "chai-spies": "0.7.1",
+    "istanbul": "0.4.5",
+    "mocha": "3.0.2",
+    "rewire": "2.5.2",
+    "sails-mock-models": "0.0.6",
+    "sinon": "1.17.6",
+    "sinon-chai": "2.9.0",
+    "weaselpecker": "1.2.0"
+  },
+  "homepage": "https://github.com/nutanix/emailjs#readme"
 }
