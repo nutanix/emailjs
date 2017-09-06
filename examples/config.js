@@ -1,7 +1,7 @@
 /* jshint node:true */
 
 /**
- * Replace with your postgres instance at postgres://localhost/test
+ * Replace with your postgres instance at postgres://
  */
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
      *   max: 5
      * },
      */
-    
+
     /**
      * Listener refresh settings
      * If present refreshes listener settings from mail_rules table
@@ -45,7 +45,7 @@ module.exports = {
     enabledProvider: 'office365',
     providers: {
       office365: {
-        // This host works inside the Nutanix network
+        // This host works inside the Nutanix VPN
         host: 'mailrelay.corp.nutanix.com'
       }
     }
@@ -61,7 +61,7 @@ module.exports = {
     providers: {
       postgres: {
         adapter: 'sails-postgresql',
-        url: 'postgres://lxrmrrfncgyeze:NhvTH32uglmn8CS04r0QAyA3Ya@ec2-54-235-120-118.compute-1.amazonaws.com:5432/d6f3q4os0vv4ja',
+        url: 'postgres://username:password@host:port/db',
         ssl: true,
         multipleStatements: true,
         wlNext: {

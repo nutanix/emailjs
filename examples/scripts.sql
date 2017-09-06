@@ -1,5 +1,5 @@
 /**
- * Replace your email address at <your_email@domain.com>
+ * Replace your email address at <name@domain.com>
  * Choose a schema of your choice by replacing 'mail_schema'
  */
 
@@ -78,6 +78,6 @@ CREATE TABLE mail_schema.mail_rules
     "updatedAt" timestamp with time zone
 );
 
-insert into mail_schema.mail_rules values(1,'SUCCEED_RULE',true,'welcomeemail',null,'<your_email@domain.com>',null,null,'My Subject', NOW(),NOW());
-insert into mail_schema.mail_rules values(2,'FAILED_RULE',true,'welcomeemail',null,'<your_email@domain.com>',null,null,'My Subject', NOW(),NOW());
+insert into mail_schema.mail_rules values(1,'SUCCEED_RULE',true,'welcomeemail',null,'<name@domain.com>',null,null,'My Subject', NOW(),NOW());
+insert into mail_schema.mail_rules values(2,'FAILED_RULE',true,'welcomeemail',null,'<name@domain.com>',null,null,'My Subject', NOW(),NOW());
 

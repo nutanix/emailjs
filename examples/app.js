@@ -1,7 +1,7 @@
 /* jshint node:true, strict:false */
 
 /**
- * Replace your email address at <your_email@domain.com>
+ * Replace your email address at <name@domain.com>
  */
 
 var email = require('../index'),
@@ -15,7 +15,6 @@ email.on('error', function (err) {
 });
 
 email.connect(templates, config, rules, function (err) {
-  console.log('called');
   console.log('[Client] Error initializing module: ', err);
 });
 
@@ -26,16 +25,16 @@ email.on('ready', function () {
       path: 'http://www.pdf995.com/samples/pdf.pdf'
     }
   }, function (err, data) {
-  	// OPTIONAL callback
+    // OPTIONAL callback
     console.log('err >>> ', err);
     console.log('data >>> ', data);
   });
   
   /* This email will NOT be sent */
-  //client.emit('FAILED_RULE', {}, {});
+  email.fire('FAILED_RULE', {}, {});
   
   /* Rules not configured are not processed */
-  //client.emit('NON_EXISTENT_RULE', {}, {});
+  //email.fire('NON_EXISTENT_RULE', {}, {});
   
   /* Send an email without any preconfigured config or rules*/
   //sendEmailWithoutConfiguration();
@@ -47,7 +46,7 @@ function sendEmailWithoutConfiguration () {
     name: 'John Doe'
   }, 
   {
-    to: '<your_email@domain.com>', // Replace your email address here
+    to: '<name@domain.com>', // Replace your email address here
     subject: 'Test Email',
     template: 'welcomeemail',
     attachments: [

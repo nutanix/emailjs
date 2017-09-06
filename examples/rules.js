@@ -2,15 +2,15 @@
 /* jshint node:true */
 
 var rules = {
-  SUCCEED_RULE: function (rule, content, options) {
+  SUCCEED_RULE: function (eventSettings, content, options) {
     /**
      * 1st argument gives you access to rule information configured
      * 
      * Changes made to the rule object have no effect
      */
        
-    rule.enabled = false;
-    rule.eventname = 'RANDOM_NAME';
+    eventSettings.enabled = false;
+    eventSettings.eventname = 'RANDOM_NAME';
 
     /*
      * 2nd argument gives you access to the content passed

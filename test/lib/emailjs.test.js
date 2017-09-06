@@ -7,10 +7,8 @@ var chai = require('chai'),
   sinon = require('sinon'),
   Q = require('q'),
   fs = require('fs'),
-  waterline = require('waterline'),
   nodemailer = require('nodemailer'),
   mock = require('sails-mock-models'),
-  rewire = require('rewire'),
   modelPath = '../../lib/orm/',
   MailArchive = require(modelPath+'mail_archive'),
   MailOutbox = require(modelPath+'mail_outbox'),
@@ -94,21 +92,6 @@ var emailjs = require('../../lib/emailjs'),
       updatedAt: '2017-09-05T01:15:17.845Z' 
     }  
   ],
-  inputconfig = {
-    defaults: {},
-    transport: {
-      providers: {
-        office365: {}
-      },
-      enabledProvider: 'office365'
-    },
-    connections: {
-      providers: {
-        postgres: {}
-      },
-      enabledProvider: 'postgres'
-    }
-  },
   inputmodel = {collections: {
       mailrules: {
         find: function () {}
@@ -118,7 +101,8 @@ var emailjs = require('../../lib/emailjs'),
       },
       mailoutbox: {
         create: function () {},
-        update: function () {}
+        update: function () {},
+        find: function () {}
       }
     }, 
     connections: {}
@@ -128,6 +112,54 @@ var emailjs = require('../../lib/emailjs'),
     accepted: [],
     rejected: []
   },
+  outboxData = [{
+    eid: 1,
+    eventname: 'SUCCEED_RULE',
+    template: 'welcomeemail',
+    content:
+    {
+      name: 'Mark Anthony'
+    },
+    subject: 'This subject changed',
+    from: 'emailJS NPM <noreply@emailjs.com>',
+    to: 'mariovinay@gmail.com',
+    cc: null,
+    bcc: null,
+    html: '<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset="UTF-8">\n    <title>My Sample email</title>\n  <style type="text/css">\n   \n  </style>\n  </head>\n  <body>\n    <h2>Welcome to emailJS</h2>\n    <p>This email was sent to Mark Anthony</p>\n  </body>\n</html>\n',
+    text: 'Welcome to emailJS\nThis email was sent to ',
+    attachments:
+    {
+      href: 'http://www.pdf995.com/samples/pdf.pdf'
+    },
+    error: 'Error: getaddrinfo ENOTFOUND mailrelay.corp.nutanix.com mailrelay.corp.nutanix.com:25\n    at errnoException (dns.js:27:10)\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:78:26)',
+    attempts: 1,
+    createdAt: '2017-09-05T01:16:06.000Z',
+    updatedAt: '2017-09-05T01:16:06.000Z'
+  },
+  {
+    eid: 2,
+    eventname: 'SUCCEED_RULE',
+    template: 'welcomeemail',
+    content:
+    {
+      name: 'Mark Anthony'
+    },
+    subject: 'This subject changed',
+    from: 'emailJS NPM <noreply@emailjs.com>',
+    to: 'mariovinay@gmail.com',
+    cc: null,
+    bcc: null,
+    html: '<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset="UTF-8">\n    <title>My Sample email</title>\n  <style type="text/css">\n   \n  </style>\n  </head>\n  <body>\n    <h2>Welcome to emailJS</h2>\n    <p>This email was sent to Mark Anthony</p>\n  </body>\n</html>\n',
+    text: 'Welcome to emailJS\nThis email was sent to ',
+    attachments:
+    {
+      href: 'http://www.pdf995.com/samples/pdf.pd'
+    },
+    error: 'Error: Invalid status code 404\n    at ClientRequest.<anonymous> (/Users/mario.vina/Workspaces/js/work/ntnx-emailjs-module/node_modules/nodemailer/node_modules/mailcomposer/node_modules/buildmail/node_modules/nodemailer-fetch/lib/fetch.js:177:36)\n    at emitOne (events.js:77:13)\n    at ClientRequest.emit (events.js:169:7)\n    at HTTPParser.parserOnIncomingClient [as onIncoming] (_http_client.js:433:21)\n    at HTTPParser.parserOnHeadersComplete (_http_common.js:103:23)\n    at Socket.socketOnData (_http_client.js:322:20)\n    at emitOne (events.js:77:13)\n    at Socket.emit (events.js:169:7)\n    at readableAddChunk (_stream_readable.js:153:18)\n    at Socket.Readable.push (_stream_readable.js:111:10)\n    at TCP.onread (net.js:536:20)',
+    attempts: 1,
+    createdAt: '2017-09-05T01:45:50.000Z',
+    updatedAt: '2017-09-05T01:45:50.000Z'
+  }],
   nodemailermock = {
     sendMail: function (options, cb) {
       cb(mailermockerr, mailermockdata);
@@ -144,11 +176,15 @@ var emailjs = require('../../lib/emailjs'),
       throw new Error('Rule exception');
     }
   },
-  callbackFunc = function () {};
+  callbackFunc = function () {},
+  errorCallbackFunc = function () {};
 emailjs.on('ready', callbackFunc);
-emailjs.on('error', function (err) { // Need to check if main code blocks if error event handler missing
-  //console.log('OMG! error emit!');
-});
+emailjs.on('error', errorCallbackFunc);
+
+var timeoutfns = [],
+initSetTimeout = function (fn, interval) {
+  timeoutfns.push(fn);
+};
 
 function initializeModel(model) {
   model.find = function () {};
@@ -573,7 +609,7 @@ describe('emailjs', function () {
     describe('', function () {
       var model;
       beforeEach(function () {
-
+        global.setTimeout = initSetTimeout;
       });
       afterEach(function () {
         indexjs.waterline.initialize.restore();
@@ -586,7 +622,15 @@ describe('emailjs', function () {
         var cwd = process.cwd(), config;
         cwd += '/examples/views/templates';
         config = {
-          defaults: {},
+          defaults: {
+            retry: {
+              interval: 900000, // Every 15 mins
+              max: 5
+            },
+            refresh: {
+              interval: 900000
+            }
+          },
           transport: {
             providers: {
               office365: {}
@@ -617,6 +661,53 @@ describe('emailjs', function () {
           try {
             expect(err).to.equal(null);
             expect(data).to.exist;
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
+
+      it('should return error module already initialized', function (done) {
+        var cwd = process.cwd(), config;
+        cwd += '/examples/views/templates';
+        config = {
+          defaults: {
+            retry: {
+              interval: 900000, // Every 15 mins
+              max: 5
+            }
+          },
+          transport: {
+            providers: {
+              office365: {}
+            },
+            enabledProvider: 'office365'
+          },
+          connections: {
+            providers: {
+              postgres: {}
+            },
+            enabledProvider: 'postgres'
+          }
+        };
+        model = {collections: {
+            mailrules: {
+              find: function () {}
+            }
+          }, 
+          connections: {}
+        };
+        mock.mockModel(inputmodel.collections.mailrules, 'find', rules);
+        mock.mockModel(inputmodel.collections.mailarchive, 'create', {});
+        mock.mockModel(inputmodel.collections.mailoutbox, 'create', {});
+        mock.mockModel(inputmodel.collections.mailoutbox, 'update', {});
+        sinon.stub(indexjs.waterline, 'initialize')
+          .yields(null, inputmodel);
+        emailjs.connect(cwd, config, rulesConfig, function (err, data) {
+          try {
+            expect(err.message).to.equal('Already initialized');
+            expect(data).to.equal(undefined);
             done();
           } catch (err) {
             done(err);
@@ -797,6 +888,74 @@ describe('emailjs', function () {
           done(err);
         }
       });
+    });
+  });
+
+  describe('#retryErrorMails()', function () {
+    var origMailerMockData;
+
+    beforeEach(function (done) {
+      origMailerMockData = mailermockdata;
+      mock.mockModel(inputmodel.collections.mailrules, 'find', rules);
+      mock.mockModel(inputmodel.collections.mailarchive, 'create', {});
+      mock.mockModel(inputmodel.collections.mailoutbox, 'create', {});
+      mock.mockModel(inputmodel.collections.mailoutbox, 'update', {});
+      mock.mockModel(inputmodel.collections.mailoutbox, 'find', outboxData);
+      done();
+    });
+    afterEach(function () {
+      mailermockerr = null;
+      inputmodel.collections.mailrules.find.restore();
+      inputmodel.collections.mailarchive.create.restore();
+      inputmodel.collections.mailoutbox.create.restore();
+      inputmodel.collections.mailoutbox.update.restore();
+      inputmodel.collections.mailoutbox.find.restore();
+      mailermockdata = origMailerMockData;
+    });
+
+    it('Should successfully reprocess error emails', function (done) {
+      var retryFn;
+
+      for (var i = 0;i < timeoutfns.length;i++) {
+        if (timeoutfns[i].name === 'retryErrorMails') {
+          retryFn = timeoutfns[i];  
+        }  
+      }
+      if (retryFn) {
+        retryFn();
+      }
+      done();
+    });
+
+    it('Should fail to reprocess error mails', function (done) {
+      var retryFn;
+      mailermockerr = 'Error sending mail';
+      for (var i = 0;i < timeoutfns.length;i++) {
+        if (timeoutfns[i].name === 'retryErrorMails') {
+          retryFn = timeoutfns[i];  
+        }  
+      }
+      if (retryFn) {
+        retryFn();
+      }
+      done();
+    });
+
+    it('Should handle error when exception checking outbox', function (done) {
+      var retryFn;
+      mailermockerr = 'Error sending mail';
+      inputmodel.collections.mailoutbox.find.restore();
+      mock.mockModel(inputmodel.collections.mailoutbox, 'find', null, 
+        new Error('error'));
+      for (var i = 0;i < timeoutfns.length;i++) {
+        if (timeoutfns[i].name === 'retryErrorMails') {
+          retryFn = timeoutfns[i];  
+        }  
+      }
+      if (retryFn) {
+        retryFn();
+      }
+      done();
     });
   });
 });
