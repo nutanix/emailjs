@@ -1,3 +1,4 @@
 .jshintrc
 .jscsrc
 test
+coverage
