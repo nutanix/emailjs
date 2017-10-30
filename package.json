@@ -14,7 +14,7 @@
     "email",
     "event"
   ],
-  "author": "Mario Vinay <mariovinay.apps@gmail.com>",
+  "author": "Mario Vinay <mario.vinay@nutanix.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nutanix/emailjs/issues"

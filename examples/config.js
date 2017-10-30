@@ -44,9 +44,8 @@ module.exports = {
   transport: {
     enabledProvider: 'office365',
     providers: {
-      office365: {
-        // This host works inside the Nutanix VPN
-        host: 'mailrelay.corp.nutanix.com'
+      office365: {        
+        host: ''
       }
     }
   },

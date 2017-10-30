@@ -124,5 +124,5 @@ More examples can be found in the 'examples' folder.
 * The next version of this module will support using a config-only approach which does not need a postgres db.
 
 ### Feature Requests
-Please create an issue in this github project or email devops-us@nutanix.com 
+Please create an issue in this github project  
 
