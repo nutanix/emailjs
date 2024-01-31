@@ -20,7 +20,7 @@
     "url": "https://github.com/nutanix/emailjs/issues"
   },
   "dependencies": {
-    "nodemailer": "2.7.0",
+    "nodemailer": "6.9.8",
     "email-templates": "2.5.4",
     "handlebars": "3.0.0",
     "q": "1.4.1",
